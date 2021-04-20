@@ -4,13 +4,13 @@ on:
   workflow_dispatch:
     inputs:
       env:
-        description: "One of: [alpha, beta, qa-*, qadr, t4-uat, p66-uat1, p66-uat2, preprod, prod]"
+        description: "One of: [dev, qa, prod]"
         required: true
-        default: "alpha"
+        default: "dev"
       services:
-        description: "Services to deploy. Enter the directory name. Ex: t4-search/search, t4-counts, t4-user"
+        description: "Services to deploy. Enter the service name. Ex: search-service, counts-service, user-service"
         required: true
-        default: "t4-search/search"
+        default: "lookup-service"
   push:
     branches:
       - "master" # alpha
