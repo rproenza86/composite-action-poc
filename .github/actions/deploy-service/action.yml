@@ -3,8 +3,6 @@ description: 'Action to deploy services'
 inputs:
   service-name:
     required: true
-env:
-  SERVICE_NAME: ${{ inputs.service-name }}
 runs:
   using: "composite"
   steps:
@@ -57,3 +55,4 @@ runs:
 
         # Setting up environment variables
         echo "STAGE=$STAGE" >> $GITHUB_ENV
+        echo "SERVICE_NAME=${{ inputs.service-name }}" >> $GITHUB_ENV
