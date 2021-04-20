@@ -8,4 +8,4 @@ runs:
   steps:
     - name: Set Env by Stage
       run: echo "bla bla bla"
-      shell: ${{ inputs.shell}}
+      shell: bash
