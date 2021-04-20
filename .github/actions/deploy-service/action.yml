@@ -7,7 +7,6 @@ runs:
   using: "composite"
   steps:
     - name: Set Env by Stage
-        id: env
         run: |
         echo REF: ${{ github.ref }}
         echo ENV: ${{ github.event.inputs.env }}
