@@ -34,7 +34,7 @@ jobs:
         uses: ./.github/actions/deploy-service
         with:
           service-name: lookup
-      - name: Check Env:
+      - name: Check Env
         run: |
           echo STAGE: $STAGE
           echo SERVICE_NAME: $SERVICE_NAME
