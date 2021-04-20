@@ -1,0 +1,59 @@
+name: 'Deploy Service'
+description: 'Action to deploy services'
+inputs:
+  service-name:
+    required: true
+env:
+  SERVICE_NAME: ${{ inputs.service-name }}
+runs:
+  using: "composite"
+  steps:
+    - name: Set Env by Stage
+        id: env
+        run: |
+        echo REF: ${{ github.ref }}
+        echo ENV: ${{ github.event.inputs.env }}
+
+        ENV=${{ github.event.inputs.env }}
+
+        if [[ "${{ contains(github.ref, 'tags') }}" == true || ${ENV} != "" ]]; then
+          # we know its a tag or manual trigger... set the env.
+          REF=${GITHUB_REF##*/}
+
+          TAG=${ENV:=$REF}
+          echo $TAG
+
+          case $TAG in
+          dev*)
+            STAGE=alpha
+            ;;
+          qa-*)
+            STAGE=qa
+            ;;
+          prod*)
+            STAGE=prod
+            ;;
+          *)
+            # raise error and stop build since tag not recognized
+            echo "tag not recognized"
+            echo $TAG
+            exit 1
+            ;;
+          esac
+
+        else
+          # its a commit -- we can assume alpha since master is the only branch we trigger on commit
+
+          BRANCH=${GITHUB_REF##*/}
+          echo $BRANCH
+
+          case $BRANCH in
+          master)
+            STAGE=dev
+            ;;
+          esac
+
+        fi
+
+        # Setting up environment variables
+        echo "STAGE=$STAGE" >> $GITHUB_ENV

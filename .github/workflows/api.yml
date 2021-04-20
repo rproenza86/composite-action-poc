@@ -1,0 +1,41 @@
+name: API
+
+on:
+  workflow_dispatch:
+    inputs:
+      env:
+        description: "One of: [alpha, beta, qa-*, qadr, t4-uat, p66-uat1, p66-uat2, preprod, prod]"
+        required: true
+        default: "alpha"
+      services:
+        description: "Services to deploy. Enter the directory name. Ex: t4-search/search, t4-counts, t4-user"
+        required: true
+        default: "t4-search/search"
+  push:
+    branches:
+      - "master" # alpha
+      - "dev/webx-site" # beta
+    tags:
+      - "qa-*"
+      - "qadr*"
+      - "t4-uat*"
+      - "p66-uat1*"
+      - "p66-uat2*"
+      - "preprod*"
+      - "prod*"
+    paths:
+      - "api/**"
+
+jobs:
+  deploy-lookup-service:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy Service
+        uses: ./.github/actions/deploy-service
+        with:
+          service-name: lookup
+      - name: Check Env:
+        run: |
+          echo STAGE: $STAGE
+          echo SERVICE_NAME: $SERVICE_NAME
+
